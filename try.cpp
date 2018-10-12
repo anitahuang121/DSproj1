@@ -1,15 +1,23 @@
-
 #include<iostream>
 #include<fstream>
 #include<vector>
 using namespace std;
 bool isPeak(int i,int j,int *matrix,int row,int col);
 vector <int> PEAK;
-int main(){
+int main(int argc,char *argv[]){
     fstream testcase;
     int i,j,row,col;
     int count = 0;
-    testcase.open("matrix.data",ios::in);
+    string A,B,path1,path2;
+    A = "/matrix.data";
+    B = "/final.peak";
+    if(argc!=2){
+        cout<<"fail";
+    }
+    path1 = argv[1] + A;
+    path2 = argv[1] + B;
+    cout<<path1;
+    testcase.open(path1,ios::in);
     if(!testcase) {
             cout<<"fail"<<endl;
             return 0;
@@ -32,19 +40,18 @@ int main(){
             }
         }
     }
-    cout<<count<<endl;
+    //cout<<count<<endl;
     /*for(auto i=0;i<PEAK.size();i=i+2){
         cout<<PEAK.at(i)<<' ';
         cout<<PEAK.at(i+1)<<endl;
     }*/
-    testcase.open("final.peak",ios::out);
-    if(testcase.fail()) cout<<"fail";
+    testcase.open(path2,ios::out);
+    if(testcase.fail()) cout<<"fail2";
     else{
         testcase<<count<<endl;
         for(i=0;i<PEAK.size();i=i+2){
             testcase<<PEAK.at(i)<<' ';
             testcase<<PEAK.at(i+1)<<endl;
-         //   cout<<"GOOD";
         }
     }
     testcase.close();
