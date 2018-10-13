@@ -2,7 +2,7 @@
 #include<fstream>
 #include<vector>
 using namespace std;
-bool isPeak(int i,int j,int *matrix,int row,int col);
+
 vector <int> PEAK;
 int main(int argc,char *argv[]){
     fstream testcase;
@@ -28,10 +28,8 @@ int main(int argc,char *argv[]){
     int *matrix = new int [2*col];
     for(i=0;i<row;i++){
         nowi = i%2;
-        for(j=0;j<col;j++){
-            testcase>>A1;
-            if(i==0) matrix[j] = A1;
-            else if(i==1){
+            if(i==0) for(j=0;j<col;j++){testcase>>A1; matrix[j] = A1;}
+            else if(i==1){for(j=0;j<col;j++){testcase>>A1;
                 if(j==0) {if(*(matrix+j)>=A1 && *(matrix+j)>=*(matrix+j+1))  {
                 PEAK.push_back(i);
                 PEAK.push_back(j+1);
@@ -47,8 +45,8 @@ int main(int argc,char *argv[]){
                 count++;}
                 }
                 matrix[col+j] = A1; 
-            }
-            else if(i>1&&i<row-1){
+            }}
+            else if(i>1&&i<row-1){for(j=0;j<col;j++){testcase>>A1;
                 ju=(nowi+1)%2;
                 if(j==0) {if(*(matrix+col*ju+j)>=A1&&*(matrix+col*ju+j)>=*(matrix+col*ju+j+1)&&*(matrix+col*ju+j)>=*(matrix+col*nowi+j))  {
                 PEAK.push_back(i);
@@ -66,8 +64,8 @@ int main(int argc,char *argv[]){
                 count++;}
             }
                 matrix[col*nowi+j] = A1;
-            }
-            else if(i==row-1){
+            }}
+            else if(i==row-1){for(j=0;j<col;j++){testcase>>A1;
                 ju=(nowi+1)%2;
                 if(j==0) {if(*(matrix+col*ju+j)>=A1 && *(matrix+col*ju+j)>=*(matrix+col*ju+j+1) &&*(matrix+col*ju+j)>=*(matrix+col*nowi+j) )  {
                 PEAK.push_back(i);
@@ -85,11 +83,8 @@ int main(int argc,char *argv[]){
                 count++;
             }}
                 matrix[col*nowi+j] = A1;
-                }
-                
+                }}
         }
-        
-    }
     nowi=(row-1)%2;
     ju = (nowi+1)%2;
     for(a=0;a<col;a++){
