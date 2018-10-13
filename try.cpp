@@ -6,7 +6,7 @@ using namespace std;
 vector <int> PEAK;
 int main(int argc,char *argv[]){
     fstream testcase;
-    int i,j,row,col,nowi,ju,a=0,b;
+    int i,j,row,col,nowi,ju,a,b;
     int A1;
     int count = 0;
     string A,B,path1,path2;
