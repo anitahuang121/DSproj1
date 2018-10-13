@@ -6,7 +6,8 @@ bool isPeak(int i,int j,int *matrix,int row,int col);
 vector <int> PEAK;
 int main(int argc,char *argv[]){
     fstream testcase;
-    int i,j,row,col;
+    int i,j,row,col,nowi,ju,a=0,b;
+    int A1;
     int count = 0;
     string A,B,path1,path2;
     A = "/matrix.data";
@@ -24,24 +25,92 @@ int main(int argc,char *argv[]){
     }
     testcase>>row;
     testcase>>col;
-    int *matrix = new int [row*col];
+    int *matrix = new int [2*col];
     for(i=0;i<row;i++){
+        nowi = i%2;
         for(j=0;j<col;j++){
-            testcase>>*(matrix+col*i+j);
-        }
-    }
-    testcase.close();
-    for(i=0;i<row;i++){
-        for(j=0;j<col;j++){
-                if(isPeak(i,j,matrix,row,col)) {
-                PEAK.push_back(i+1);
+            testcase>>A1;
+            if(i==0) matrix[j] = A1;
+            else if(i==1){
+                if(j==0) {if(*(matrix+j)>=A1 && *(matrix+j)>=*(matrix+j+1))  {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}}
+                else if(j==col-1) {if(*(matrix+j)>=A1 && *(matrix+j)>=*(matrix+j-1))   {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}
+                }
+                else {if(*(matrix+j)>=A1 && *(matrix+j)>=*(matrix+j+1) && *(matrix+j)>=*(matrix+j-1))   {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}
+                }
+                matrix[col+j] = A1; 
+            }
+            else if(i>1&&i<row-1){
+                ju=(nowi+1)%2;
+                if(j==0) {if(*(matrix+col*ju+j)>=A1&&*(matrix+col*ju+j)>=*(matrix+col*ju+j+1)&&*(matrix+col*ju+j)>=*(matrix+col*nowi+j))  {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}
+            }
+                else if(j==col-1) {if(*(matrix+col*ju+j)>=A1&&*(matrix+col*ju+j)>=*(matrix+col*ju+j-1)&&*(matrix+col*ju+j)>=*(matrix+col*nowi+j))  {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}
+            }
+                else {if(*(matrix+col*ju+j)>=A1 && *(matrix+col*ju+j)>=*(matrix+col*ju+j+1) && *(matrix+col*ju+j)>=*(matrix+col*ju+j-1)&&*(matrix+col*ju+j)>=*(matrix+col*nowi+j))   {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}
+            }
+                matrix[col*nowi+j] = A1;
+            }
+            else if(i==row-1){
+                ju=(nowi+1)%2;
+                if(j==0) {if(*(matrix+col*ju+j)>=A1 && *(matrix+col*ju+j)>=*(matrix+col*ju+j+1) &&*(matrix+col*ju+j)>=*(matrix+col*nowi+j) )  {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}
+            }
+                else if(j==col-1) {if(*(matrix+col*ju+j)>=A1 && *(matrix+col*ju+j)>=*(matrix+col*ju+j-1) && *(matrix+col*ju+j)>=*(matrix+col*nowi+j) )  {
+                PEAK.push_back(i);
+                PEAK.push_back(j+1);
+                count++;}
+            }
+                else { if(*(matrix+col*ju+j)>=A1 && *(matrix+col*ju+j)>=*(matrix+col*ju+j+1) && *(matrix+col*ju+j)>=*(matrix+col*ju+j-1) && *(matrix+col*ju+j)>=*(matrix+col*nowi+j))  {
+                PEAK.push_back(i);
                 PEAK.push_back(j+1);
                 count++;
-            }
+            }}
+                matrix[col*nowi+j] = A1;
+                }
+                
         }
+        
     }
-    //cout<<count<<endl;
-    /*for(auto i=0;i<PEAK.size();i=i+2){
+    nowi=(row-1)%2;
+    ju = (nowi+1)%2;
+    for(a=0;a<col;a++){
+                if(a==0) {if( *(matrix+col*nowi+a)>=*(matrix+col*ju+a) && *(matrix+col*nowi+a)>=*(matrix+col*nowi+a+1))  {
+                PEAK.push_back(row);
+                PEAK.push_back(a+1);
+                count++;}
+            }
+                else if(a==col-1) {if(*(matrix+col*nowi+a)>=*(matrix+col*ju+a) && *(matrix+col*nowi+a)>=*(matrix+col*nowi+a-1))  {
+                PEAK.push_back(row);
+                PEAK.push_back(a+1);
+                count++;}
+            }
+                else {if( *(matrix+col*nowi+a)>=*(matrix+col*ju+a) && *(matrix+col*nowi+a)>=*(matrix+col*nowi+a+1) && *(matrix+col*nowi+a)>=*(matrix+col*nowi+a-1))  {
+                PEAK.push_back(row);
+                PEAK.push_back(a+1);
+                count++;;
+            }}
+                }
+    testcase.close();
+   /* for(auto i=0;i<PEAK.size();i=i+2){
         cout<<PEAK.at(i)<<' ';
         cout<<PEAK.at(i+1)<<endl;
     }*/
@@ -56,19 +125,4 @@ int main(int argc,char *argv[]){
     }
     testcase.close();
     return 0;
-}
-bool isPeak(int i,int j,int *matrix,int row,int col){
-    if(i==0) {
-            if (j==0) return(*(matrix+col*i+j)>=*(matrix+col*(i+1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j+1)));
-            else if (j==col-1) return(*(matrix+col*i+j)>=*(matrix+col*(i+1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j-1)));
-            else return(*(matrix+col*i+j)>=*(matrix+col*(i+1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j+1))&&*(matrix+col*i+j)>=*(matrix+col*i+(j-1)));
-    }
-    else if(i==row-1) {
-            if (j==0) return(*(matrix+col*i+j)>=*(matrix+col*(i-1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j+1)));
-            else if (j==col-1) return(*(matrix+col*i+j)>=*(matrix+col*(i-1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j-1)));
-            else return(*(matrix+col*i+j)>=*(matrix+col*(i-1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j+1))&&*(matrix+col*i+j)>=*(matrix+col*i+(j-1)))  ;
-    }
-    else if (j==0) return(*(matrix+col*i+j)>=*(matrix+col*(i+1)+j)&&*(matrix+col*i+j)>=*(matrix+col*(i-1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j+1))) ;
-    else if (j==col-1) return(*(matrix+col*i+j)>=*(matrix+col*(i+1)+j)&&*(matrix+col*i+j)>=*(matrix+col*(i-1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j-1)));
-    else return (*(matrix+col*i+j)>=*(matrix+col*(i+1)+j)&&*(matrix+col*i+j)>=*(matrix+col*(i-1)+j)&&*(matrix+col*i+j)>=*(matrix+col*i+(j+1))&&*(matrix+col*i+j)>=*(matrix+col*i+(j-1)));
 }
